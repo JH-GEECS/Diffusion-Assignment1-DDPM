@@ -93,9 +93,14 @@ class DDPMScheduler(BaseScheduler):
         
         noise = torch.randn_like(x_t)
 
-        alpha_t = self._get_teeth(self.alphas, t)
-        alpha_cumprod_t = self._get_teeth(self.alphas_cumprod, t)
-        sigma_t = self._get_teeth(self.sigmas, t)
+        # import ipdb; ipdb.set_trace()
+        
+        # alpha_t = self._get_teeth(self.alphas, t)
+        # alpha_cumprod_t = self._get_teeth(self.alphas_cumprod, t)
+        # sigma_t = self._get_teeth(self.sigmas, t)
+        alpha_t = self.alphas[t]
+        alpha_cumprod_t = self.alphas_cumprod[t]
+        sigma_t = self.sigmas[t]
         
         sample_prev = (1 / alpha_t.sqrt()) * (x_t - (1-alpha_t)/(1-alpha_cumprod_t).sqrt() * eps_theta) + sigma_t * noise
         #######################
@@ -133,6 +138,9 @@ class DDPMScheduler(BaseScheduler):
         # Assignment 1. Implement the DDPM forward step.
         
         alpha_cumprod_t = self._get_teeth(self.alphas_cumprod, t)
+        # alpha_cumprod_t = self.alphas_cumprod[t]
+        
+        # import ipdb; ipdb.set_trace()
         
         x_t = alpha_cumprod_t.sqrt() * x_0 + (1 - alpha_cumprod_t).sqrt() * eps
         #######################

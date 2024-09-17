@@ -14,7 +14,7 @@ class DiffusionModule(nn.Module):
         self.var_scheduler = var_scheduler
 
     def get_loss(self, x0, class_label=None, noise=None):
-        ######## TODO ########
+        ######## TODO ######## written
         # DO NOT change the code outside this part.
         # compute noise matching loss.
         B = x0.shape[0]
@@ -24,7 +24,8 @@ class DiffusionModule(nn.Module):
             noise = torch.randn_like(x0)
             # assume noise \sim \mathcal{N}(0, I)
 
-        x_t = self.var_scheduler.q_sample(x0, timestep, noise)
+        # import ipdb; ipdb.set_trace()
+        x_t, _noise = self.var_scheduler.add_noise(x0, timestep, noise)
         eps_theta = self.network(x_t, timestep)
         # network는 eps predictor
         loss = (eps_theta - noise).pow(2).mean()
