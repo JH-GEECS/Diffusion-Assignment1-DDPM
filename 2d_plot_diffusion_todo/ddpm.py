@@ -127,7 +127,7 @@ class DiffusionModule(nn.Module):
         # ).sqrt()
         eps_theta = self.network(xt, t)
         
-        x_t_prev = (1/alphas.sqrt()) * (xt - (betas/(1-alphas_prod_t).sqrt()) * eps_theta) + (((1-alphas_prod_t_prev) * betas) / (1-alphas_prod_t)).sqrt() * noise
+        x_t_prev = (1/alphas.sqrt()) * (xt - ((1-alphas)/(1-alphas_prod_t).sqrt()) * eps_theta) + (((1-alphas_prod_t_prev) * betas) / (1-alphas_prod_t)).sqrt() * noise
 
         #######################
         return x_t_prev

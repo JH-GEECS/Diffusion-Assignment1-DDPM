@@ -18,8 +18,16 @@ class DiffusionModule(nn.Module):
         # DO NOT change the code outside this part.
         # compute noise matching loss.
         B = x0.shape[0]
-        timestep = self.var_scheduler.uniform_sample_t(B, self.device)        
-        loss = x0.mean()
+        timestep = self.var_scheduler.uniform_sample_t(B, self.device)
+        
+        if noise is None:
+            noise = torch.randn_like(x0)
+            # assume noise \sim \mathcal{N}(0, I)
+
+        x_t = self.var_scheduler.q_sample(x0, timestep, noise)
+        eps_theta = self.network(x_t, timestep)
+        # network는 eps predictor
+        loss = (eps_theta - noise).pow(2).mean()
         ######################
         return loss
     
